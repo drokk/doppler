@@ -15,9 +15,23 @@ end
 
 optparse.parse!
 
+pick = options[:hash]
+
+case pick
+  when "md5"
+    digest = OpenSSL::Digest::MD5.new
+  when "sha1"
+    digest = OpenSSL::Digest::SHA1.new
+  when "sha256"
+    digest = OpenSSL::Digest::SHA256.new
+end
+
+file = "#{ARGV[0]}"
+
+data = File.read(file)
+
+digest_2 = digest.digest(data)
+
 pp options
 pp ARGV
-
-
-
-
+pp digest_2.each_byte.map { |b| b.to_s(16)}.join
