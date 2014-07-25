@@ -1,0 +1,20 @@
+# ruby version of powershell script of mine.
+require "openssl"
+require "optparse"
+
+options = {}
+
+OptionParser.new do |opts|
+    opts.banner = "Usage: crypthashsum [options]"
+
+    opts.on("-md5") do |md5|
+        options[:hash] = md5
+    end
+end.parse!
+
+p options
+p ARGV
+
+
+
+
