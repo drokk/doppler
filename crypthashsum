@@ -1,19 +1,22 @@
 # ruby version of powershell script of mine.
-require "openssl"
-require "optparse"
-
+require 'openssl'
+require 'optparse'
+require 'pp'
 options = {}
+options[:hash] = 'sha1'
 
-OptionParser.new do |opts|
-    opts.banner = "Usage: crypthashsum [options]"
+optparse = OptionParser.new do |opts|
+    opts.banner = 'Usage: crypthashsum [options]'
 
-    opts.on("-md5") do |md5|
-        options[:hash] = md5
+    opts.on('--hash [TYPE]', 'Select hash type (md5, sha1, sha256') do |hash|
+        options[:hash] = hash
     end
-end.parse!
+end
 
-p options
-p ARGV
+optparse.parse!
+
+pp options
+pp ARGV
 
 
 
