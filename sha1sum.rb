@@ -1,21 +1,22 @@
-# ruby version of powershell script of mine.
+# ruby version of power shell script of mine.
+# encoding: utf-8
 require 'openssl'
 require 'optparse'
 require 'pp'
 options = {}
-options[:hash] = 'sha1'
+options[:pick] = 'sha1'
 
 optparse = OptionParser.new do |opts|
     opts.banner = 'Usage: crypthashsum [options]'
 
     opts.on('--hash [TYPE]', 'Select hash type (md5, sha1, sha256') do |hash|
-        options[:hash] = hash
+        options[:pick] = hash
     end
 end
 
 optparse.parse!
 
-pick = options[:hash]
+pick = options[:pick]
 
 case pick
   when "md5"
@@ -32,6 +33,6 @@ data = File.read(file)
 
 digest_2 = digest.digest(data)
 
-pp options
+pp pick
 pp ARGV
-pp digest_2.each_byte.map { |b| b.to_s(16)}.join
+pp digest_2.each_byte.map { |b| b.to_s(%x)}.join
