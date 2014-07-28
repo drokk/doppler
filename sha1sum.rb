@@ -35,4 +35,5 @@ digest_2 = digest.digest(data)
 
 pp pick
 pp ARGV
-pp digest_2.each_byte.map { |b| b.to_s(%x)}.join
+# pp digest_2.each_byte.map { |b| b.to_s(16)}.join
+pp digest_2.unpack('H*').first
