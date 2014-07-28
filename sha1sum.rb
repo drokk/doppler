@@ -25,15 +25,30 @@ case pick
     digest = OpenSSL::Digest::SHA1.new
   when "sha256"
     digest = OpenSSL::Digest::SHA256.new
+  else
+    abort (message="unknown hash!")
+
 end
 
 file = "#{ARGV[0]}"
 
-data = File.read(file)
-
-digest_2 = digest.digest(data)
+# if the files is bigger than LONG_MAX then read it in 512 byte chunks
+# according to http://ruby.about.com/od/advancedruby/ss/Cryptographic-Hashes-In-Ruby.htm
+if File.size(file) > 2147483647 then
+  File.open(file) do|big_file|
+    buffer = ''
+    # read the file 512 bytes at a time
+    while not big_file.eof
+      big_file.read(512, buffer)
+      digest.update(buffer)
+    end
+  end
+  digest_2 = digest.digest
+else
+  digest_2 = digest.digest(File.read(file))
+end
 
 pp pick
 pp ARGV
-# pp digest_2.each_byte.map { |b| b.to_s(16)}.join
+pp File.size(file)
 pp digest_2.unpack('H*').first
