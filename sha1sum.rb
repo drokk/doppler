@@ -4,6 +4,7 @@ require 'openssl'
 require 'optparse'
 require 'pp'
 options = {}
+# default hash is sha1
 options[:pick] = 'sha1'
 
 optparse = OptionParser.new do |opts|
@@ -19,18 +20,19 @@ optparse.parse!
 pick = options[:pick]
 
 case pick
-  when "md5"
+  when 'md5'
     digest = OpenSSL::Digest::MD5.new
-  when "sha1"
+  when 'sha1'
     digest = OpenSSL::Digest::SHA1.new
-  when "sha256"
+  when 'sha256'
     digest = OpenSSL::Digest::SHA256.new
   else
     abort (message="unknown hash!")
 
 end
 
-file = "#{ARGV[0]}"
+# create a digest for each file
+ARGV.each do |file|
 
 if File.exists?(file) then
 
@@ -51,9 +53,11 @@ if File.exists?(file) then
   end
 
   pp pick
-  pp ARGV
+  pp file
   pp File.size(file)
   pp digest_2.unpack('H*').first
 else
-  abort (message="file not found")
+  pp file
+  pp 'file not found'
+end
 end
