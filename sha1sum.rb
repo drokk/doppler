@@ -46,16 +46,18 @@ if File.exists?(file) then
         big_file.read(512, buffer)
         digest.update(buffer)
       end
+      digest_2 = digest.digest
     end
   # smaller files we can just read into memory.
   else
-    digest.digest(File.read(file))
+    digest_2 = digest.digest(File.read(file))
   end
 
   pp pick
   pp file
   pp File.size(file)
-  pp digest.digest.unpack('H*').first
+  pp digest_2.unpack('H*').first
+
 else
   pp file
   pp 'file not found'
