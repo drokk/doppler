@@ -27,7 +27,7 @@ case pick
   when 'sha256'
     digest = OpenSSL::Digest::SHA256.new
   else
-    abort (message="unknown hash!")
+    abort (message='unknown hash!')
 
 end
 
@@ -47,15 +47,15 @@ if File.exists?(file) then
         digest.update(buffer)
       end
     end
-    digest_2 = digest.digest
+  # smaller files we can just read into memory.
   else
-    digest_2 = digest.digest(File.read(file))
+    digest.digest(File.read(file))
   end
 
   pp pick
   pp file
   pp File.size(file)
-  pp digest_2.unpack('H*').first
+  pp digest.digest.unpack('H*').first
 else
   pp file
   pp 'file not found'
