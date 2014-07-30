@@ -27,9 +27,11 @@ pick = options[:pick]
 
 dir = options[:dir]
 
+files = ARGV
+
 # populate files only if dir is not nil as in the user has defined a directory
 unless dir.nil?
-  files = Dir.entries(dir).reject { |content| content =~ /^\.*$/}
+  files = Dir.entries(dir).reject { |content| File::ftype(dir+"/"+content) != "file"} #we want only files in our array
 end
 
 
@@ -46,7 +48,13 @@ case pick
 end
 
 # create a digest for each file
-ARGV.each do |file|
+files.each do |file|
+
+# if we are trying to a checksum on a directory then we need to prepend the directory path to the file structure.
+unless dir.nil?
+  file = dir+"/"+file
+end
+
 
 if File.exists?(file) then
 
