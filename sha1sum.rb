@@ -10,14 +10,28 @@ options[:pick] = 'sha1'
 optparse = OptionParser.new do |opts|
     opts.banner = 'Usage: crypthashsum [options]'
 
-    opts.on('--hash [TYPE]', 'Select hash type (md5, sha1, sha256') do |hash|
+    opts.on('--hash TYPE', 'Select hash type (md5, sha1, sha256') do |hash|
         options[:pick] = hash
     end
+
+    opts.on('-d [TYPE]', 'directory of files we want to checksum') do |directory|
+        options[:dir] = directory
+    end
+
+
 end
 
 optparse.parse!
 
 pick = options[:pick]
+
+dir = options[:dir]
+
+# populate files only if dir is not nil as in the user has defined a directory
+unless dir.nil?
+  files = Dir.entries(dir).reject { |content| content =~ /^\.*$/}
+end
+
 
 case pick
   when 'md5'
