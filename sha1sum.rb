@@ -1,4 +1,4 @@
-# ruby version of power shell script of mine.
+# ruby replacement for an old powershell script.
 # encoding: utf-8
 require 'openssl'
 require 'optparse'
@@ -27,11 +27,12 @@ pick = options[:pick]
 
 dir = options[:dir]
 
-files = ARGV
-
 # populate files by directory listing only if dir is not nil (as in the user has defined a directory)
-unless dir.nil?
+if dir.nil?
+  files = ARGV
+  else
   files = Dir.entries(dir).reject { |content| File::ftype(dir+"/"+content) != "file"} #we want only files in our array
+  files = files.map { |file| "#{dir}/#{file}"} # and we need to add the path to the directory to each file
 end
 
 
@@ -50,35 +51,24 @@ end
 # create a digest for each file
 files.each do |file|
 
-# if we are trying to a checksum on a directory then we need to prepend the directory path to the file structure.
-unless dir.nil?
-  file = dir+"/"+file
-end
 
+if File.exists?(file)
 
-if File.exists?(file) then
-
-  # if the files is bigger than LONG_MAX then read it in 512 byte chunks
+  # if the files is larger than LONG_MAX then read it in 512 byte chunks
   # according to http://ruby.about.com/od/advancedruby/ss/Cryptographic-Hashes-In-Ruby.htm
-  if File.size(file) > 2147483647 then
-    File.open(file) do|big_file|
+
+    File.open(file) do |big_file|
       buffer = ''
-      # read the file 512 bytes at a time
       while not big_file.eof
         big_file.read(512, buffer)
         digest.update(buffer)
       end
-      digest_2 = digest.digest
     end
-  # smaller files we can just read into memory.
-  else
-    digest_2 = digest.digest(File.read(file))
-  end
-
   pp pick
   pp file
   pp File.size(file)
-  pp digest_2.unpack('H*').first
+  puts digest
+
 
 else
   pp file
