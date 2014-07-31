@@ -8,7 +8,7 @@ options = {}
 options[:pick] = 'sha1'
 
 optparse = OptionParser.new do |opts|
-    opts.banner = 'Usage: crypthashsum [options]'
+    opts.banner = 'Usage: sha1sum.rb [options]'
 
     opts.on('--hash TYPE', 'Select hash type (md5, sha1, sha256') do |hash|
         options[:pick] = hash
@@ -29,7 +29,7 @@ dir = options[:dir]
 
 files = ARGV
 
-# populate files only if dir is not nil as in the user has defined a directory
+# populate files by directory listing only if dir is not nil (as in the user has defined a directory)
 unless dir.nil?
   files = Dir.entries(dir).reject { |content| File::ftype(dir+"/"+content) != "file"} #we want only files in our array
 end
