@@ -47,15 +47,16 @@ case pick
     abort (message='unknown hash!')
 
 end
+result = {}
 
 # create a digest for each file
-files.each do |file|
+def hash_file (files)
+  files.each do |file|
 
 
-if File.exists?(file)
-
-  # if the files is larger than LONG_MAX then read it in 512 byte chunks
-  # according to http://ruby.about.com/od/advancedruby/ss/Cryptographic-Hashes-In-Ruby.htm
+    if (File.exists?(file) and  File.readable_real?(file))
+    # if the files is larger than LONG_MAX then read it in 512 byte chunks
+    # according to http://ruby.about.com/od/advancedruby/ss/Cryptographic-Hashes-In-Ruby.htm
 
     File.open(file) do |big_file|
       buffer = ''
@@ -64,14 +65,17 @@ if File.exists?(file)
         digest.update(buffer)
       end
     end
-  pp pick
-  pp file
-  pp File.size(file)
-  puts digest
 
+    result[file] = [pick,File.size(file),digest]
+    #pp pick
+    #pp file
+    #pp File.size(file)
+    #puts digest
+    #puts result
 
-else
-  pp file
-  pp 'file not found'
-end
+    else
+    pp file
+    pp 'file not found'
+    end
+  end
 end
