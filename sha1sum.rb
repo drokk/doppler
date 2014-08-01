@@ -47,10 +47,11 @@ case pick
     abort (message='unknown hash!')
 
 end
-result = {}
+
 
 # create a digest for each file
-def hash_file (files)
+def hash_file (files, digest,pick)
+  result = {}
   files.each do |file|
 
 
@@ -66,7 +67,7 @@ def hash_file (files)
       end
     end
 
-    result[file] = [pick,File.size(file),digest]
+    result[file] = [pick,File.size(file),digest.digest.unpack('H*').first]
     #pp pick
     #pp file
     #pp File.size(file)
@@ -78,4 +79,9 @@ def hash_file (files)
     pp 'file not found'
     end
   end
+  return result
 end
+
+file_digest = hash_file files, digest, pick
+
+pp file_digest.keys
