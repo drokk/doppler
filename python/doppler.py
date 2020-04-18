@@ -18,6 +18,13 @@ args = parser.parse_args()
 print(args.string,' ',args.hash2)
 
 if args.hash2 == 'SHA256':
-    hash_object = SHA256.new(data=b'first')
-    pass
-print('first',' ',args.hash2,' ',hash_object.hexdigest())
+    hash_object = SHA256.new(data=args.string.encode())
+elif args.hash2 == 'MD5':
+        hash_object = MD5.new(data=args.string.encode())
+elif args.hash2 == 'SHA1':
+        hash_object = SHA1.new(data=args.string.encode())
+else:
+    print('unknown hash')     
+
+if 'hash_object' in locals():     # if the hash_object is defined print out the string,hash type and the hash
+    print(args.string,' ',args.hash2,' ',hash_object.hexdigest())
