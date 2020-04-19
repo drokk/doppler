@@ -10,13 +10,19 @@ args = parser.parse_args()
 
 print(args.input,' ',args.hash2)
 
-if args.hash2.find(','):
-    hashes = args.hash2.split(',') 
+
+# offloading argument inputs into local variables 
+args_input = args.input  
+args_hashes = args.hash2 
+
+
+if args_hashes.find(','): # if receiving a string of comma separated options split them into list 
+    hashes = args_hashes.split(',') 
 else:
-    hashes = args.hash2
+    hashes = args_hashes
 
 
-for string in args.input:
+for string in args_input:
     for hash2 in hashes: 
         if hash2 == 'SHA256':
             hash_object = SHA256.new(data=string.encode())
