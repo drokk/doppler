@@ -1,6 +1,9 @@
 #!/usr/local/bin/python3
-from Crypto.Hash import SHA256,MD5,SHA1
+from Crypto.Hash import *
 import argparse 
+
+# let's get all available hashes 
+#available_hashes = Crypto.Hash.__all__
 
 parser = argparse.ArgumentParser(description='lets create some hashes')
 parser.add_argument(metavar='String', type=str, nargs='+',dest='input', help='give me word')
@@ -13,7 +16,11 @@ print(args.input,' ',args.hash2)
 
 # offloading argument inputs into local variables 
 args_input = args.input  
-args_hashes = args.hash2 
+args_hashes = args.hash2.upper()  
+
+# catch the all in the hashes option 
+if args_hashes == 'ALL':
+    args_hashes = 'SHA256,MD5,SHA1'
 
 
 if args_hashes.find(','): # if receiving a string of comma separated options split them into list 
