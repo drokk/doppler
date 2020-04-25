@@ -1,6 +1,7 @@
 #!/usr/local/bin/python3
 #TODO switch to hashlib
 #TODO flesh out file digestion
+#TODO identify file system objects
 from Crypto.Hash import *
 import argparse 
 
