@@ -1,5 +1,4 @@
 #!/usr/local/bin/python3
-#TODO flesh out file digestion
 #TODO identify file system objects
 import hashlib 
 import argparse 
@@ -41,15 +40,13 @@ if args_input : # only what to do checksum on cli input if there not files
             if 'hashobject' in locals():     # if the hash_object is defined print out the string,hash type and the hash
                 print(string,' ',hashtype,' ',hashobject.hexdigest())
 
-# if args_file : #read the file and produce the hash. 
-#     with open(args_file, 'rb') as file: 
-#         file_block = file.read(BLOCK_SIZE)
-#         while len(file_block) > 0: 
-#             if hash2 == 'SHA256':
-#                 hash_object = SHA256.(data=string.encode())
-#             elif hash2 == 'MD5':
-#                     hash_object = MD5.new(data=string.encode())
-#             elif hash2 == 'SHA1':
-#                     hash_object = SHA1.new(data=string.encode())
-#             else:
-#                 print('unknown hash')     
+if args_file : #read the file and produce the hash, see https://nitratine.net/blog/post/how-to-hash-files-in-python/
+    for hashtype in hashes:
+        hashobject = hashlib.new(hashtype) 
+        with open(args_file, 'rb') as file: 
+            file_block = file.read(BLOCK_SIZE)
+            while len(file_block) > 0:
+                hashobject.update(file_block)
+                file_block = file.read(BLOCK_SIZE)
+        print(args_file,' | ',hashtype,' | ',hashobject.hexdigest())        
+
