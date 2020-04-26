@@ -1,8 +1,7 @@
 #!/usr/local/bin/python3
-#TODO switch to hashlib
 #TODO flesh out file digestion
 #TODO identify file system objects
-from Crypto.Hash import *
+import hashlib 
 import argparse 
 
 # let's get all available hashes 
@@ -19,11 +18,12 @@ args = parser.parse_args()
 
 # offloading argument inputs into local variables 
 args_input = args.input  
-args_hashes = args.hash2.upper()  
+args_hashes = args.hash2.lower()  
 args_file = args.file 
+BLOCK_SIZE = 65536
 # catch the all in the hashes option 
-if args_hashes == 'ALL':
-    args_hashes = 'SHA256,MD5,SHA1'
+if args_hashes == 'all':
+    args_hashes = 'sha256,md5,sha1'
 
 
 if args_hashes.find(','): # if receiving a string of comma separated options split them into list 
@@ -33,15 +33,23 @@ else:
 
 if args_input : # only what to do checksum on cli input if there not files 
     for string in args_input:
-        for hash2 in hashes: 
-            if hash2 == 'SHA256':
-                hash_object = SHA256.new(data=string.encode())
-            elif hash2 == 'MD5':
-                    hash_object = MD5.new(data=string.encode())
-            elif hash2 == 'SHA1':
-                    hash_object = SHA1.new(data=string.encode())
-            else:
-                print('unknown hash')     
+        for hashtype in hashes: 
+            hashobject = hashlib.new(hashtype)
+            hashobject.update(string.encode())
+               
 
-            if 'hash_object' in locals():     # if the hash_object is defined print out the string,hash type and the hash
-                print(string,' ',hash2,' ',hash_object.hexdigest())
+            if 'hashobject' in locals():     # if the hash_object is defined print out the string,hash type and the hash
+                print(string,' ',hashtype,' ',hashobject.hexdigest())
+
+# if args_file : #read the file and produce the hash. 
+#     with open(args_file, 'rb') as file: 
+#         file_block = file.read(BLOCK_SIZE)
+#         while len(file_block) > 0: 
+#             if hash2 == 'SHA256':
+#                 hash_object = SHA256.(data=string.encode())
+#             elif hash2 == 'MD5':
+#                     hash_object = MD5.new(data=string.encode())
+#             elif hash2 == 'SHA1':
+#                     hash_object = SHA1.new(data=string.encode())
+#             else:
+#                 print('unknown hash')     
